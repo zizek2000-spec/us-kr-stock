@@ -1,0 +1,4 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {score,decision,riskDecision,weights} from './public/engine.js';
+test('weighted scores reject missing, invalid and out-of-range data',()=>{assert.equal(score('KR',weights.KR),100);assert.equal(score('US',weights.US),100);assert.equal(score('KR',[25]),null);assert.equal(score('US',[26,15,10,15,10,10,10,5]),null);assert.equal(score('KR',[null,15,15,15,10,5,10,5]),null)});
+test('invalidated and expired signals cannot remain BUY',()=>{assert.equal(decision(90,{invalid:true}),'AVOID');assert.equal(decision(90,{expired:true}),'WATCH');assert.equal(decision(null),'WATCH');assert.equal(decision(74),'WATCH');assert.equal(decision(75),'BUY')});
+test('risk thresholds match the specification',()=>{assert.equal(riskDecision(49),'KEEP');assert.equal(riskDecision(50),'REDUCE');assert.equal(riskDecision(70),'REDUCE');assert.equal(riskDecision(71),'EXIT')});
