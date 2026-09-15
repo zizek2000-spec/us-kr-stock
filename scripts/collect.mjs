@@ -1,0 +1,2 @@
+import {collect} from '../lib/market.js';import {mkdir,writeFile} from 'node:fs/promises';
+const data=await collect();if(data.items.filter(i=>i.quote).length<Math.ceil(data.items.length*.7))throw Error('가격 수집 성공률 70% 미만: 이전 스냅샷 보존');await mkdir('public/data',{recursive:true});await writeFile('public/data/snapshot.json',JSON.stringify(data));console.log('Snapshot:',data.generatedAt,'quotes',data.items.filter(i=>i.quote).length);

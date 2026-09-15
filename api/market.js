@@ -1,0 +1,3 @@
+import {collect} from '../lib/market.js';
+let cached=null;let inflight=null;
+export default async function handler(req,res){if(req.method!=='GET')return res.status(405).json({error:'GET only'});try{if(!cached||Date.now()-Date.parse(cached.generatedAt)>300000){inflight??=collect().finally(()=>{inflight=null});cached=await inflight;}const ok=cached.items.some(i=>i.quote);res.setHeader('Cache-Control',ok?'public, s-maxage=300, stale-while-revalidate=60':'no-store');return res.status(ok?200:503).json(cached);}catch{res.status(503).json({error:'시세 공급자 연결 실패. 잠시 후 다시 시도하세요.'})}}

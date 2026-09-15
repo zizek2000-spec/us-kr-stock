@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {parseChart,assess} from './lib/market.js';
+const now=Date.parse('2026-09-15T20:00:00Z');const raw={chart:{result:[{meta:{regularMarketPrice:110,regularMarketTime:now/1000,currency:'USD',symbol:'TEST',exchangeTimezoneName:'America/New_York',chartPreviousClose:50},timestamp:[now/1000-86400,now/1000],indicators:{quote:[{close:[100,110],volume:[1000,2000]}]}}]}};
+test('daily change uses prior session rather than range-start chartPreviousClose',()=>{const q=parseChart(raw,now);assert.ok(Math.abs(q.change-10)<.001);assert.equal(q.previous,100);assert.equal(q.ma20,null)});
+test('missing and future timestamps fail closed',()=>{assert.throws(()=>parseChart({},now));assert.throws(()=>parseChart(raw,now-3600000))});
+test('stale data does not produce trading signal',()=>{const q=parseChart(raw,now+97*3600000);assert.equal(q.stale,true);assert.equal(assess({quote:q}).label,'UNAVAILABLE');assert.equal(assess({quote:null}).label,'UNAVAILABLE')});
+test('price alerts never imply unverified BUY scores',()=>{assert.equal(assess({quote:{stale:false,change:8}}).label,'AVOID');assert.equal(assess({quote:{stale:false,change:-6}}).label,'AVOID');assert.equal(assess({quote:{stale:false,change:2}}).label,'WATCH');assert.equal(assess({quote:{stale:false,change:2}}).score,null)});

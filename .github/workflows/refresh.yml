@@ -1,0 +1,31 @@
+name: Refresh market snapshot
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '40 23 * * 0-4'
+    - cron: '35 20,21 * * 1-5'
+    - cron: '25 12,13 * * 1-5'
+permissions:
+  contents: write
+concurrency:
+  group: market-snapshot
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/collect.mjs
+      - name: Save latest successful snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/snapshot.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh market snapshot [skip ci]'
+            git push
+          fi
