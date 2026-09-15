@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {observationScore} from './public/scoring.js';
+import {parseDaily,parseFlow} from './lib/kis.js';
+const now=Date.parse('2026-09-15T08:00:00Z');
+const item={market:'KR',quote:{price:110,ma20:100,change:2,volumeRatio:2,completed:true,asOf:new Date(now).toISOString(),sessionDate:'20260915'},flow:{date:'20260915',ratio:.1}};
+test('real observations yield finite bounded score with transparent factor sum',()=>{const r=observationScore(item,now);assert.equal(r.coverage,100);assert.equal(r.value,Math.round(r.parts.reduce((s,p)=>s+p.points,0)));assert.ok(r.value>=0&&r.value<=100)});
+test('missing, future, and stale prices cannot receive a score',()=>{for(const asOf of [undefined,'bad',new Date(now-97*3600000).toISOString(),new Date(now+3600000).toISOString()])assert.equal(observationScore({...item,quote:{...item.quote,asOf}},now).value,null)});
+test('missing flow is excluded and exposed, not treated as zero evidence',()=>{const r=observationScore({...item,flow:null},now);assert.equal(r.coverage,80);assert.equal(r.provisional,true);assert.equal(r.parts.at(-1).points,null)});
+test('intraday volume and mismatched flow dates are excluded',()=>{const r=observationScore({...item,quote:{...item.quote,completed:false},flow:{date:'20260914',ratio:.1}},now);assert.equal(r.coverage,65);assert.equal(r.parts[2].points,null);assert.equal(r.parts.at(-1).points,null)});
+test('extreme price change keeps warning even with other strong factors',()=>{assert.equal(observationScore({...item,quote:{...item.quote,change:8}},now).warning,true)});
+const daily={output2:[{stck_bsop_date:'20260915',stck_clpr:'110',acml_vol:'2000'},{stck_bsop_date:'20260914',stck_clpr:'100',acml_vol:'1000'},{stck_bsop_date:'20260911',stck_clpr:'95',acml_vol:'1000'}]};
+test('KIS uses prior completed session before 16:00 KST',()=>{assert.equal(parseDaily(daily,'005930.KS',now-3*3600000).sessionDate,'20260914');const q=parseDaily(daily,'005930.KS',now);assert.equal(q.sessionDate,'20260915');assert.ok(Math.abs(q.change-10)<.001)});
+test('KIS empty numeric fields stay missing and investor dates must match',()=>{const q=parseDaily(daily,'005930.KS',now);assert.equal(parseFlow({output:[{stck_bsop_date:'20260914',frgn_ntby_qty:'1',orgn_ntby_qty:'2'}]},q),null);assert.equal(parseFlow({output:[{stck_bsop_date:'20260915',frgn_ntby_qty:'',orgn_ntby_qty:'2'}]},q),null);const f=parseFlow({output:[{stck_bsop_date:'20260915',frgn_ntby_qty:'100',orgn_ntby_qty:'-50'}]},q);assert.equal(f.ratio,.025)});
