@@ -1,0 +1,9 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {morningReport} from './public/morning.js';
+const now=Date.parse('2026-09-15T23:40:00Z');
+const kr={symbol:'005930.KS',name:'삼성전자',market:'KR',links:['NVDA'],quote:{price:105,ma20:100,change:2,completed:true,volumeRatio:1.5,asOf:'2026-09-15T06:30:00Z',sessionDate:'20260915'},flow:{date:'20260915',ratio:.08}};
+const us={symbol:'NVDA',market:'US',quote:{completed:true,change:2,asOf:'2026-09-15T20:00:00Z'}};
+const data={calendar:{date:'20260916',open:true},items:[kr,us]};
+test('preopen candidate ranks eligible observations and exposes both market inputs',()=>{const r=morningReport(data,now);assert.equal(r.status,'ready');assert.equal(r.candidates.length,1);assert.equal(r.candidates[0].rank,1);assert.ok(r.candidates[0].score>=60);assert.equal(r.targetDate,'2026-09-16')});
+test('no recommendations after open, on holiday, or without calendar confirmation',()=>{assert.equal(morningReport(data,now+3600000).status,'outside');assert.equal(morningReport({...data,calendar:{date:'20260916',open:false}},now).status,'closed');assert.equal(morningReport({...data,calendar:null},now).candidates.length,0)});
+test('missing flow, incomplete US session, and extreme price moves block recommendation',()=>{for(const items of [[{...kr,flow:null},us],[kr,{...us,quote:{...us.quote,completed:false}}],[{...kr,quote:{...kr.quote,change:8}},us],[kr,{...us,quote:{...us.quote,change:-4}}]])assert.equal(morningReport({...data,items},now).candidates.length,0)});
+test('no future or stale US information and max three stable rankings',()=>{for(const asOf of ['2026-09-16T20:00:00Z','2026-09-01T20:00:00Z'])assert.equal(morningReport({...data,items:[kr,{...us,quote:{...us.quote,asOf}}]},now).candidates.length,0);const r=morningReport({...data,items:[...Array.from({length:5},(_,i)=>({...kr,symbol:'00000'+i+'.KS'})),us]},now);assert.equal(r.candidates.length,3)});

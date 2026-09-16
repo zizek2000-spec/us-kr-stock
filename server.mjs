@@ -1,5 +1,5 @@
 import {createServer} from 'node:http';
 import {readFile} from 'node:fs/promises';
 import market from './api/market.js';import disclosures from './api/disclosures.js';
-const allowed=new Set(['index.html','style.css','app.js','engine.js','scoring.js','favicon.svg']);
+const allowed=new Set(['index.html','style.css','app.js','engine.js','scoring.js','morning.js','favicon.svg']);
 createServer(async(req,res)=>{res.status=n=>{res.statusCode=n;return res};res.json=o=>{res.setHeader('Content-Type','application/json');res.end(JSON.stringify(o))};const name=new URL(req.url,'http://localhost').pathname.slice(1)||'index.html';if(name==='api/market')return market(req,res);if(name==='api/disclosures')return disclosures(req,res);if(!allowed.has(name)){res.writeHead(404).end();return;}try{const content=await readFile(`public/${name}`);res.setHeader('Content-Type',name.endsWith('.html')?'text/html; charset=utf-8':name.endsWith('.css')?'text/css':name.endsWith('.svg')?'image/svg+xml':'text/javascript');res.end(content);}catch{res.writeHead(500).end();}}).listen(Number(process.env.PORT||4173),'127.0.0.1',()=>console.log('Market Radar server ready'));
