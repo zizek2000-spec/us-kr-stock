@@ -5,5 +5,5 @@ if(data.items.filter(i=>i.quote).length<Math.ceil(data.items.length*.7))throw Er
 await mkdir('public/data',{recursive:true});await writeFile('public/data/snapshot.json',JSON.stringify(data));
 if(data.calendar&&typeof data.calendar.open==='boolean')await writeFile('public/data/calendar.json',JSON.stringify(data.calendar));
 const report=data.morning;
-if(report?.status==='ready'&&Date.parse(report.generatedAt)<Date.parse(report.expiresAt)&&Date.now()<Date.parse(report.expiresAt))await writeFile('public/data/morning.json',JSON.stringify(report));
+if(report?.status==='ready'&&Date.parse(report.generatedAt)<Date.parse(report.expiresAt))await writeFile('public/data/morning.json',JSON.stringify(report));
 console.log('Snapshot:',data.generatedAt,'quotes',data.items.filter(i=>i.quote).length,'morning',report?.status||'not available');
