@@ -1,0 +1,34 @@
+name: Smart Money Form 4 watch
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7 * * * *'
+permissions:
+  contents: write
+concurrency:
+  group: smart-money-watch
+  cancel-in-progress: false
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check new SEC Form 4 and notify Telegram
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: node scripts/smart-money-alert.mjs
+      - name: Save deduplication state
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/data/smart-money-seen.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Update smart money SEC filing cursor [skip ci]'
+            git push
+          fi
