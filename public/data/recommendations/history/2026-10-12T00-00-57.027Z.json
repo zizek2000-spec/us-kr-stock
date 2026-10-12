@@ -1,0 +1,47 @@
+{
+  "policyVersion": "verified-v1",
+  "generatedAt": "2026-10-12T00:00:57.027Z",
+  "events": [],
+  "quotes": {
+    "SPY": {
+      "bar": {
+        "openAt": "2026-10-09T13:30:00.000Z",
+        "closeAt": "2026-10-09T20:00:00.000Z",
+        "open": 776.239990234375,
+        "high": 779.4199829101562,
+        "low": 775.1400146484375,
+        "close": 778.5700073242188,
+        "corporateAction": false,
+        "sourceUrl": "https://finance.yahoo.com/quote/SPY/history/",
+        "observedAt": "2026-10-12T00:01:02.327Z"
+      },
+      "close": 778.57,
+      "asOf": "2026-10-09T20:00:00.000Z",
+      "completed": true,
+      "ma20": 767.2629974365234,
+      "averageDollarVolume20": 35216196965.166626,
+      "source": "Yahoo Finance (비공식·지연 가능)",
+      "sourceUrl": "https://finance.yahoo.com/quote/SPY/"
+    }
+  },
+  "coverage": {
+    "insider": {
+      "status": "not_configured",
+      "message": "실제 연락 이메일을 포함한 SEC_USER_AGENT 필요"
+    },
+    "politician": {
+      "status": "not_connected",
+      "message": "공식 공시와 소유자·금액구간을 대조한 정치인 데이터 미연결."
+    },
+    "option": {
+      "status": "not_connected",
+      "message": "체결·호가·미결제약정·이용권한이 검증된 데이터 미연결. 결제 및 가상 신호 없음."
+    },
+    "prices": {
+      "status": "ok",
+      "requested": 1,
+      "received": 1,
+      "message": "Yahoo Finance 비공식 지연 시세. 한국 종목 자동 연결 없음."
+    }
+  }
+}

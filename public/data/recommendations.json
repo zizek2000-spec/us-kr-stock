@@ -1,0 +1,75 @@
+{
+  "version": "verified-v1",
+  "generatedAt": "2026-10-12T00:00:57.027Z",
+  "expiresAt": "2026-10-12T06:00:57.027Z",
+  "slot": "manual",
+  "status": "withheld",
+  "message": "추천 보류 — 검증 요건을 충족한 후보가 없습니다.",
+  "blockers": [
+    "백테스트 검증 미통과",
+    "내부자 수집 상태 불완전"
+  ],
+  "candidates": [],
+  "assessments": [],
+  "excludedEvidence": [],
+  "backtest": {
+    "policyVersion": "verified-v1",
+    "asOf": "2026-10-12T00:00:57.027Z",
+    "status": "insufficient",
+    "trades": 0,
+    "symbols": 0,
+    "spanDays": 0,
+    "averageNetReturn": null,
+    "averageExcessReturn": null,
+    "winRate": null,
+    "worstTrade": null,
+    "rejected": 1,
+    "costBps": 20,
+    "results": [],
+    "message": "최소 30건·10종목·90일의 전향 수집 표본 필요",
+    "limitations": [
+      "신규 구축 전향 표본만 사용; 과거 실적을 소급 생성하지 않음",
+      "OHLC로 장중 순서 확인 불가: 손절 우선",
+      "왕복 비용 20bp 가정; 공매도·레버리지 없음",
+      "거래별 수익률 평균이며 동시 포지션을 반영한 포트폴리오 수익률·MDD 아님",
+      "Yahoo 비공식 일봉을 전향 수집; 분할·배당 발생 보유구간은 제외, 결측 거래일은 SPY와 대조"
+    ]
+  },
+  "coverage": {
+    "insider": {
+      "status": "not_configured",
+      "message": "실제 연락 이메일을 포함한 SEC_USER_AGENT 필요"
+    },
+    "politician": {
+      "status": "not_connected",
+      "message": "공식 공시와 소유자·금액구간을 대조한 정치인 데이터 미연결."
+    },
+    "option": {
+      "status": "not_connected",
+      "message": "체결·호가·미결제약정·이용권한이 검증된 데이터 미연결. 결제 및 가상 신호 없음."
+    },
+    "prices": {
+      "status": "ok",
+      "requested": 1,
+      "received": 1,
+      "message": "Yahoo Finance 비공식 지연 시세. 한국 종목 자동 연결 없음."
+    }
+  },
+  "policy": {
+    "version": "verified-v1",
+    "minTrades": 30,
+    "minSymbols": 10,
+    "minDays": 90,
+    "maxPicks": 5,
+    "eventDays": 7,
+    "stopPct": 0.05,
+    "targetPct": 0.1,
+    "holdSessions": 10,
+    "costBps": 20
+  },
+  "scope": "미국 주식 직접 신호만 평가. 한국장 개장 전에도 미국 후보를 재검증하며, 한국 종목 추천에는 별도 국내 직접 근거와 검증이 필요합니다.",
+  "telegram": {
+    "status": "not_configured",
+    "message": "TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID 미설정"
+  }
+}
