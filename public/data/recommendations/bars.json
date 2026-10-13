@@ -11,6 +11,17 @@
         "corporateAction": false,
         "sourceUrl": "https://finance.yahoo.com/quote/SPY/history/",
         "observedAt": "2026-10-12T00:03:39.544Z"
+      },
+      {
+        "openAt": "2026-10-13T13:30:00.000Z",
+        "closeAt": "2026-10-13T20:00:00.000Z",
+        "open": 777.3400268554688,
+        "high": 778.75,
+        "low": 775.9500122070312,
+        "close": 778.010009765625,
+        "corporateAction": false,
+        "sourceUrl": "https://finance.yahoo.com/quote/SPY/history/",
+        "observedAt": "2026-10-13T23:49:29.866Z"
       }
     ]
   }
