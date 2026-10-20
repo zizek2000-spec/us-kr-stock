@@ -1,0 +1,51 @@
+{
+  "policyVersion": "verified-v1",
+  "generatedAt": "2026-10-20T23:19:41.580Z",
+  "events": [],
+  "quotes": {
+    "SPY": {
+      "bar": {
+        "openAt": "2026-10-20T13:30:00.000Z",
+        "closeAt": "2026-10-20T20:00:00.000Z",
+        "open": 765.8599853515625,
+        "high": 772.2750244140625,
+        "low": 764.260009765625,
+        "close": 769.0499877929688,
+        "corporateAction": false,
+        "sourceUrl": "https://finance.yahoo.com/quote/SPY/history/",
+        "observedAt": "2026-10-20T23:19:41.978Z"
+      },
+      "close": 769.05,
+      "asOf": "2026-10-20T20:00:00.000Z",
+      "completed": true,
+      "ma20": 770.8329956054688,
+      "averageDollarVolume20": 31850974807.54944,
+      "source": "Yahoo Finance (비공식·지연 가능)",
+      "sourceUrl": "https://finance.yahoo.com/quote/SPY/"
+    }
+  },
+  "coverage": {
+    "insider": {
+      "status": "not_configured",
+      "message": "실제 연락 이메일을 포함한 SEC_USER_AGENT 필요"
+    },
+    "politician": {
+      "status": "not_connected",
+      "message": "공식 공시와 소유자·금액구간을 대조한 정치인 데이터 미연결."
+    },
+    "option": {
+      "status": "not_connected",
+      "message": "체결·호가·미결제약정·이용권한이 검증된 데이터 미연결. 결제 및 가상 신호 없음."
+    },
+    "prices": {
+      "status": "ok",
+      "requested": 1,
+      "received": 1,
+      "message": "Yahoo Finance 비공식 지연 시세. 한국 종목 자동 연결 없음."
+    },
+    "calendar": {
+      "status": "ok",
+      "message": "기존 KIS 한국장 개장일 검증"
+    }
+  }
+}
