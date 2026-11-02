@@ -2,7 +2,11 @@
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 const statePath='public/data/smart-money-seen.json';
 const agent=process.env.SEC_USER_AGENT, token=process.env.TELEGRAM_BOT_TOKEN,chat=process.env.TELEGRAM_CHAT_ID;
-if(!agent){console.log('SEC_USER_AGENT missing; no alerts');process.exit(0)}
+const missing=['SEC_USER_AGENT','TELEGRAM_BOT_TOKEN','TELEGRAM_CHAT_ID'].filter(name=>!process.env[name]?.trim());
+if(missing.length){
+ console.error('::error::Missing required Actions secrets: '+missing.join(', '));
+ process.exit(1);
+}
 const response=await fetch('https://www.sec.gov/cgi-bin/browse-edgar?action=getcurrent&type=4&owner=only&count=40&output=atom',{headers:{'User-Agent':agent,'Accept':'application/atom+xml'},signal:AbortSignal.timeout(15000)});
 if(!response.ok)throw Error('SEC status '+response.status);
 const xml=await response.text();
